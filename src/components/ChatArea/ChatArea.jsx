@@ -42,7 +42,7 @@ const ChatArea = () => {
   const fetchMessages = useCallback(async () => {
     if (!selectedRoom) return;
     try {
-      const response = await axios.get(`${APIURL}/api/messages/${selectedRoom._id}`,{ withCredentials: true });
+      const response = await axios.get(`${APIURL}/api/chats/${selectedRoom._id}`,{ withCredentials: true });
       const messagesData = response.data.map((message) => ({
         sender: message.user.username,
         text: message.message,
