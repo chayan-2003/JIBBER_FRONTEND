@@ -15,13 +15,11 @@ const Login = () => {
             email,
             password}, { withCredentials: true });
             console.log(response);
-            if(response.status===200)
-            {
+            
             localStorage.setItem('userInfo', JSON.stringify(response.data));
         
             //i will just do this for handshaking as fetching an user from its token is tedious:)
             navigate('/chat');
-        }
     } catch (error) {
             console.error('Error logging in:', error);
         }
