@@ -18,7 +18,7 @@ const AboutUs = () => {
         <section className="section mission">
           <h2>Our Mission</h2>
           <p>
-            At ChatSphere, our mission is to connect people seamlessly across the globe through real-time communication. We believe in breaking down barriers and fostering meaningful interactions in an ever-connected world.
+            At Jibber, our mission is to connect people seamlessly across the globe through real-time communication. We believe in breaking down barriers and fostering meaningful interactions in an ever-connected world.
           </p>
         </section>
         
@@ -33,7 +33,7 @@ const AboutUs = () => {
         </section>
         
         <section className="section features">
-          <h2>What Makes ChatSphere Unique</h2>
+          <h2>What Makes Jibber Unique</h2>
           <div className="features-grid">
             <div className="feature-card">
               <FaReact className="feature-icon" />
@@ -74,7 +74,7 @@ const AboutUs = () => {
         <section className="section join-us">
           <h2>Join Us</h2>
           <p>
-            Whether you're looking to connect with friends, collaborate with colleagues, or join communities that share your passions, ChatSphere is your go-to platform for all your real-time communication needs. Join us today and be a part of a vibrant and dynamic chat community!
+            Whether you're looking to connect with friends, collaborate with colleagues, or join communities that share your passions, Jibber is your go-to platform for all your real-time communication needs. Join us today and be a part of a vibrant and dynamic chat community!
           </p>
           <button className="join-button" onClick={() => navigate('/register')}>Get Started</button>
         </section>
