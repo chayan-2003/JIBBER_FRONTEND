@@ -1,8 +1,14 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "../../utils/axiosConfig";
 import "./Sidebar.css";
-import { ChatContext } from '../../contexts/chatContext'
+import { ChatContext } from '../../contexts/chatContext';
+
+// Define APIURL outside the component to ensure it's a constant
+const APIURL =
+  process.env.NODE_ENV === "production"
+    ? "https://jibber-backend.onrender.com"
+    : "http://localhost:5000";
 
 const Sidebar = () => {
     const [newRoom, setNewRoom] = useState('');
@@ -14,18 +20,27 @@ const Sidebar = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-    const APIURL= process.env.NODE_ENV === 'production' ? 'https://jibber-backend.onrender.com' : 'http://localhost:5000';
+
     const { selectedRoom, setSelectedRoom } = useContext(ChatContext);
     
+    // Fetch rooms
     const fetchRooms = useCallback(async () => {
         try {
             setLoading(true);
             setError('');
 
-            const roomsResponse = await axios.get(`${APIURL}/api/rooms/all`,{ withCredentials: true });
+            const roomsResponse = await axios({
+                method: 'get',
+                url: `${APIURL}/api/rooms/all`,
+                withCredentials: true
+            });
             setRooms(roomsResponse.data);
 
-            const userInfoResponse = await axios.get(`${APIURL}/api/users/profile`,{ withCredentials: true });
+            const userInfoResponse = await axios({
+                method: 'get',
+                url: `${APIURL}/api/users/profile`,
+                withCredentials: true
+            });
             const userInfo = userInfoResponse.data;
 
             const joinedRooms = roomsResponse.data
@@ -47,12 +62,13 @@ const Sidebar = () => {
         } finally {
             setLoading(false);
         }
-    }, [navigate,APIURL]);
+    }, [navigate]);
 
     useEffect(() => {
         fetchRooms();
     }, [fetchRooms]);
 
+    // Handle creating a new room
     const handleCreateRoom = async (e) => {
         e.preventDefault();
         if (!newRoom.trim()) {
@@ -64,11 +80,14 @@ const Sidebar = () => {
             setLoading(true);
             setError('');
 
-            const response = await axios.post(`${APIURL}/api/rooms/create`, {
-                
-                name: newRoom,
-                description: newRoomDescription,
-            },{ withCredentials: true
+            const response = await axios({
+                method: 'post',
+                url: `${APIURL}/api/rooms/create`,
+                data: {
+                    name: newRoom,
+                    description: newRoomDescription
+                },
+                withCredentials: true
             });
 
             setRooms(prevRooms => [...prevRooms, response.data]);
@@ -93,12 +112,17 @@ const Sidebar = () => {
         }
     };
 
+    // Handle joining a room
     const handleJoinRoom = async (roomId) => {
         try {
             setLoading(true);
             setError('');
 
-            await axios.post(`${APIURL}/api/rooms/join/${roomId}`,{ withCredentials: true });
+            await axios({
+                method: 'post',
+                url: `${APIURL}/api/rooms/join/${roomId}`,
+                withCredentials: true
+            });
             setUserRooms(prevUserRooms => [...prevUserRooms, roomId]);
 
             const joinedRoom = rooms.find(room => room._id === roomId);
@@ -122,12 +146,18 @@ const Sidebar = () => {
         }
     };
 
+    // Handle leaving a room
     const handleLeaveRoom = async (roomId) => {
         try {
             setLoading(true);
             setError('');
 
-            await axios.post(`${APIURL}/api/rooms/leave/${roomId}`, { withCredentials: true });
+            await axios({
+                method: 'post',
+                url: `${APIURL}/api/rooms/leave/${roomId}`,
+                data: {},
+                withCredentials: true
+            });
             setUserRooms(prevUserRooms => prevUserRooms.filter(id => id !== roomId));
 
             if (selectedRoom && selectedRoom._id === roomId) {
@@ -150,12 +180,17 @@ const Sidebar = () => {
         }
     };
 
+    // Handle logout
     const handleLogout = async () => {
         try {
             setLoading(true);
             setError('');
 
-            await axios.post('/api/users/logout');
+            await axios({
+                method: 'post',
+                url: `${APIURL}/api/users/logout`,
+                withCredentials: true
+            });
             navigate('/login');
         } catch (error) {
             console.error('Error logging out:', error);
