@@ -7,10 +7,10 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-
+    const APIURL = process.env.NODE_ENV === 'production' ? 'https://jibber-backend.onrender.com/' : 'http://localhost:5000';
     const handleRegister = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:5000/api/users/register', {
+        const response = await fetch(`${APIURL}/api/users/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

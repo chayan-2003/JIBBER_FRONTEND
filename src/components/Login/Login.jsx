@@ -7,11 +7,11 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const APIURL = process.env.NODE_ENV === 'production' ? 'https://jibber-backend.onrender.com/' : 'http://localhost:5000';
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-          const response= await axios.post('http://localhost:5000/api/users/login', {
+          const response= await axios.post(`${APIURL}/api/users/login`, {
             email,
             password}, { withCredentials: true });
             console.log(response);
