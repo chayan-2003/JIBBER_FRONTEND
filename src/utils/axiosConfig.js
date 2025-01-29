@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+const baseURL=process.env.NODE_ENV === 'production' ? 'https://jibber-backend.onrender.com' : 'http://localhost:5000';
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000' || 'https://jibber-backend.onrender.com', 
+    baseURL: baseURL, 
     withCredentials: true, 
 });
 
