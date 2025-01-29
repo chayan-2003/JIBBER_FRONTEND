@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from '../../utils/axiosConfig';
+import axios from 'axios';
 import "./Sidebar.css";
 import { ChatContext } from '../../contexts/chatContext'
 
@@ -22,10 +22,10 @@ const Sidebar = () => {
             setLoading(true);
             setError('');
 
-            const roomsResponse = await axios.get(`${APIURL}/api/rooms/all`);
+            const roomsResponse = await axios.get(`${APIURL}/api/rooms/all`,{ withCredentials: true });
             setRooms(roomsResponse.data);
 
-            const userInfoResponse = await axios.get(`${APIURL}/api/users/profile`);
+            const userInfoResponse = await axios.get(`${APIURL}/api/users/profile`,{ withCredentials: true });
             const userInfo = userInfoResponse.data;
 
             const joinedRooms = roomsResponse.data
@@ -65,8 +65,10 @@ const Sidebar = () => {
             setError('');
 
             const response = await axios.post(`${APIURL}/api/rooms/create`, {
+                
                 name: newRoom,
                 description: newRoomDescription,
+            },{ withCredentials: true
             });
 
             setRooms(prevRooms => [...prevRooms, response.data]);
@@ -96,7 +98,7 @@ const Sidebar = () => {
             setLoading(true);
             setError('');
 
-            await axios.post(`/api/rooms/join/${roomId}`);
+            await axios.post(`${APIURL}/api/rooms/join/${roomId}`,{ withCredentials: true });
             setUserRooms(prevUserRooms => [...prevUserRooms, roomId]);
 
             const joinedRoom = rooms.find(room => room._id === roomId);
@@ -125,7 +127,7 @@ const Sidebar = () => {
             setLoading(true);
             setError('');
 
-            await axios.post(`/api/rooms/leave/${roomId}`, {});
+            await axios.post(`${APIURL}/api/rooms/leave/${roomId}`, { withCredentials: true });
             setUserRooms(prevUserRooms => prevUserRooms.filter(id => id !== roomId));
 
             if (selectedRoom && selectedRoom._id === roomId) {

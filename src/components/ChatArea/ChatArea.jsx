@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useCallback } from "react";
 import { ChatContext } from "../../contexts/chatContext";
 import "./ChatArea.css";
-import axios from "../../utils/axiosConfig";
+import axios from  'axios';
 
 // Define APIURL outside the component to ensure it's a constant
 const APIURL =
@@ -24,7 +24,7 @@ const ChatArea = () => {
   // Fetch user data on component mount
   const fetchUserData = useCallback(async () => {
     try {
-      const response = await axios.get(`${APIURL}/api/users/profile`);
+      const response = await axios.get(`${APIURL}/api/users/profile`,{ withCredentials: true });
       if (response.status === 200) {
         setUser(response.data);
       }
@@ -42,7 +42,7 @@ const ChatArea = () => {
   const fetchMessages = useCallback(async () => {
     if (!selectedRoom) return;
     try {
-      const response = await axios.get(`${APIURL}/api/messages/${selectedRoom._id}`);
+      const response = await axios.get(`${APIURL}/api/messages/${selectedRoom._id}`,{ withCredentials: true });
       const messagesData = response.data.map((message) => ({
         sender: message.user.username,
         text: message.message,
