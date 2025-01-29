@@ -7,7 +7,7 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const APIURL = process.env.NODE_ENV === 'production' ? 'https://jibber-backend.onrender.com/' : 'http://localhost:5000';
+    const APIURL = process.env.NODE_ENV === 'production' ? 'https://jibber-backend.onrender.com' : 'http://localhost:5000';
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
