@@ -1,0 +1,89 @@
+.auth-container {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-container h2 {
+    margin-bottom: 30px;
+    color: #6B73FF;
+    font-size: 28px;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-container input {
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.auth-container input:focus {
+    border-color: #6B73FF;
+    box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);
+    outline: none;
+}
+
+.submit-button {
+    padding: 12px 0;
+    background-color: #6B73FF;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #5a63e5;
+    transform: translateY(-2px);
+}
+
+.redirect-text {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.redirect-link {
+    color: #6B73FF;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.redirect-link:hover {
+    color: #000DFF;
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 30px 20px;
+    }
+
+    .auth-container h2 {
+        font-size: 24px;
+    }
+
+    .submit-button {
+        font-size: 14px;
+    }
+
+    .redirect-text {
+        font-size: 12px;
+    }
+}
