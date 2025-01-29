@@ -14,7 +14,7 @@ const Sidebar = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-
+    const APIURL= process.env.NODE_ENV === 'production' ? 'https://jibber-backend.onrender.com' : 'http://localhost:5000';
     const { selectedRoom, setSelectedRoom } = useContext(ChatContext);
     
     const fetchRooms = useCallback(async () => {
@@ -22,10 +22,10 @@ const Sidebar = () => {
             setLoading(true);
             setError('');
 
-            const roomsResponse = await axios.get('/api/rooms/all');
+            const roomsResponse = await axios.get(`${APIURL}/api/rooms/all`);
             setRooms(roomsResponse.data);
 
-            const userInfoResponse = await axios.get('/api/users/profile');
+            const userInfoResponse = await axios.get(`${APIURL}/api/users/profile`);
             const userInfo = userInfoResponse.data;
 
             const joinedRooms = roomsResponse.data
@@ -47,7 +47,7 @@ const Sidebar = () => {
         } finally {
             setLoading(false);
         }
-    }, [navigate]);
+    }, [navigate,APIURL]);
 
     useEffect(() => {
         fetchRooms();
@@ -64,9 +64,9 @@ const Sidebar = () => {
             setLoading(true);
             setError('');
 
-            const response = await axios.post('/api/rooms/create', {
+            const response = await axios.post(`${APIURL}/api/rooms/create`, {
                 name: newRoom,
-                description: newRoomDescription
+                description: newRoomDescription,
             });
 
             setRooms(prevRooms => [...prevRooms, response.data]);

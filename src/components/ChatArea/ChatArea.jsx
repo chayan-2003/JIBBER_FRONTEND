@@ -12,12 +12,13 @@ const ChatArea = () => {
             text: "Welcome to the chat!",
         },
     ]);
+    const APIURL= process.env.NODE_ENV === 'production' ? 'https://jibber-backend.onrender.com' : 'http://localhost:5000';
     const [newMessage, setNewMessage] = useState("");
     const [error, setError] = useState("");
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.get("/api/users/profile");
+            const response =await axios.get(`${APIURL}/api/users/profile`);
             if (response.status === 200) {
                 setUser(response.data);
             }
@@ -29,11 +30,11 @@ const ChatArea = () => {
 
     useEffect(() => {
         fetchUserData();
-    }, []);
+    }, [ ]);
 
     const fetchMessages = useCallback(async () => {
         try {
-            const response = await axios.get(`/api/chats/${selectedRoom._id}`);
+            const response = await axios.get(`${APIURL}/api/messages/${selectedRoom._id}`);
             const messagesData = response.data.map((message) => ({
                 sender: message.user.username,
                 text: message.message,
@@ -43,7 +44,7 @@ const ChatArea = () => {
             console.error("Error fetching messages:", error);
             setError("Failed to fetch messages.");
         }
-    }, [selectedRoom]);
+    }, [selectedRoom,APIURL]);
 
     useEffect(() => {
         if (selectedRoom && socket) {
