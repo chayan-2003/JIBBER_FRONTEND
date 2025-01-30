@@ -1,7 +1,8 @@
-import React, { useEffect, useContext, useState, useCallback } from "react";
+import React, { useEffect, useContext, useState, useCallback, useRef } from "react";
 import { ChatContext } from "../../contexts/chatContext";
 import "./ChatArea.css";
 import axios from "../../utils/axiosConfig";
+
 
 const ChatArea = () => {
   const { selectedRoom, socket } = useContext(ChatContext);
@@ -15,8 +16,11 @@ const ChatArea = () => {
   const [newMessage, setNewMessage] = useState("");
   const [error, setError] = useState("");
   const [onlineUsers, setOnlineUsers] = useState(new Set());
-  
-  // Fetch user data on component mount
+  const [usersTyping, setUsersTyping] = useState(new Set());
+  const typingTimeoutRef = useRef(null);
+
+
+
   const fetchUserData = useCallback(async () => {
     try {
       const response = await axios.get("/api/users/profile");
@@ -51,14 +55,13 @@ const ChatArea = () => {
     if (selectedRoom && socket) {
       fetchMessages();
       socket.emit("joinRoom", selectedRoom._id);
-   
-       socket.on("onlineUsers", (userIds)=>
-      {
-        const onlineSet= new Set(userIds); 
+
+      socket.on("onlineUsers", (userIds) => {
+        const onlineSet = new Set(userIds);
         console.log(onlineSet);
         setOnlineUsers(onlineSet);
       });
-      return()=>{
+      return () => {
         socket.off("onlineUsers");
       }
       // return () => {
@@ -75,15 +78,32 @@ const ChatArea = () => {
           { sender: message.sender, text: message.text },
         ]);
       };
-      
+
       socket.on("newMessage", handleNewMessage);
 
       // Cleanup function to remove listener
+      if (selectedRoom) {
+        socket.on("userTyping", (userIds) => {
+          const typingSet = new Set(userIds);
+          console.log("Typing users:", typingSet);
+          setUsersTyping(typingSet);
+        });
+        socket.on("userStopTyping", (userId) => {
+          const typingSet = new Set(usersTyping);
+          typingSet.delete(userId);
+          console.log("Typing users:", typingSet);
+          setUsersTyping(typingSet);
+        });
+      }
       return () => {
         socket.off("newMessage", handleNewMessage);
+        socket.off("userTyping");
+        socket.off("userStopTyping");
+
       };
+      
     }
-  }, [socket]);
+  }, [socket, selectedRoom, usersTyping]);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -95,16 +115,30 @@ const ChatArea = () => {
     });
     setNewMessage("");
   };
+
+  const emitTyping = () => {
+    if (socket && user && selectedRoom) {
+      socket.emit("typing", { sender: user._id, roomId: selectedRoom._id });
+    }
+  };
   const typing = (e) => {
-    e.preventDefault();
-    socket.emit("typing", {
-      sender: user._id,
-      roomId: selectedRoom._id,
+    setNewMessage(e.target.value);
+
+    // Clear the existing timeout, if any
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
     }
 
-    )
-    setNewMessage(e.target.value);
-  }
+    emitTyping();
+
+   
+    typingTimeoutRef.current = setTimeout(() => {
+      if (socket && user && selectedRoom) {
+        socket.emit("stopTyping", { sender: user._id, roomId: selectedRoom._id });
+      }
+    }, 1000);
+  };
+
 
   return (
     <div className="chat-container">
@@ -115,9 +149,8 @@ const ChatArea = () => {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`message ${
-                  message.sender === user.username ? "sent" : "received"
-                }`}
+                className={`message ${message.sender === user.username ? "sent" : "received"
+                  }`}
               >
                 <strong>{message.sender}</strong>: {message.text}
               </div>
@@ -149,6 +182,9 @@ const ChatArea = () => {
                 {onlineUsers.has(member._id) && (
                   <span className="online-status">🟢 Online</span>
                 )}
+                {usersTyping.has(member._id) && (
+                  <div className="typing-status">Typing...</div>)
+                }
               </li>
             ))}
           </ul>
