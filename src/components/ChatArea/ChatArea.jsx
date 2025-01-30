@@ -68,7 +68,7 @@ const ChatArea = () => {
       //   socket.off("onlineUsers", handleOnlineUsers);
       // };
     }
-  }, [selectedRoom, socket, fetchMessages]); // Removed 'onlineUsers' from dependencies
+  }, [selectedRoom, socket, fetchMessages]); 
 
   useEffect(() => {
     if (socket) {
@@ -81,7 +81,6 @@ const ChatArea = () => {
 
       socket.on("newMessage", handleNewMessage);
 
-      // Cleanup function to remove listener
       if (selectedRoom) {
         socket.on("userTyping", (userIds) => {
           const typingSet = new Set(userIds);
@@ -124,7 +123,7 @@ const ChatArea = () => {
   const typing = (e) => {
     setNewMessage(e.target.value);
 
-    // Clear the existing timeout, if any
+
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
     }

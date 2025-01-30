@@ -4,7 +4,7 @@ import axios from "../../utils/axiosConfig";
 import "./Sidebar.css";
 import { ChatContext } from '../../contexts/chatContext';
 
-// Define APIURL outside the component to ensure it's a constant
+
 const APIURL =
   process.env.NODE_ENV === "production"
     ? "https://jibber-backend.onrender.com"
@@ -23,7 +23,7 @@ const Sidebar = () => {
 
     const { selectedRoom, setSelectedRoom } = useContext(ChatContext);
     
-    // Fetch rooms
+ 
     const fetchRooms = useCallback(async () => {
         try {
             setLoading(true);
@@ -68,7 +68,7 @@ const Sidebar = () => {
         fetchRooms();
     }, [fetchRooms]);
 
-    // Handle creating a new room
+
     const handleCreateRoom = async (e) => {
         e.preventDefault();
         if (!newRoom.trim()) {
@@ -113,7 +113,7 @@ const Sidebar = () => {
         }
     };
 
-    // Handle joining a room
+
     const handleJoinRoom = async (roomId) => {
         try {
             setLoading(true);
@@ -147,7 +147,7 @@ const Sidebar = () => {
         }
     };
 
-    // Handle leaving a room
+   
     const handleLeaveRoom = async (roomId) => {
         try {
             setLoading(true);
@@ -180,18 +180,17 @@ const Sidebar = () => {
             setLoading(false);
         }
     };
-
-    // Handle logout
     const handleLogout = async () => {
         try {
             setLoading(true);
             setError('');
-
+            
             await axios({
                 method: 'post',
                 url: `${APIURL}/api/users/logout`,
                 withCredentials: true
             });
+            localStorage.removeItem('userInfo');
             navigate('/login');
         } catch (error) {
             console.error('Error logging out:', error);
@@ -260,6 +259,7 @@ const Sidebar = () => {
 
             <div className="logout-section">
                 <button onClick={handleLogout} disabled={loading}>
+                    
                     {loading ? 'Logging out...' : 'Logout'}
                 </button>
             </div>

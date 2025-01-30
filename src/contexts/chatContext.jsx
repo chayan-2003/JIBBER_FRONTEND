@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { io } from "socket.io-client"; 
-// Create ChatContext
+
 export const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
