@@ -91,6 +91,7 @@ const Sidebar = () => {
             });
 
             setRooms(prevRooms => [...prevRooms, response.data]);
+            setUserRooms(prevUserRooms => [...prevUserRooms, response.data._id]);
             setSelectedRoom(response.data);
             setIsCreating(false);
             setNewRoom('');

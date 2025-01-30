@@ -1,13 +1,7 @@
 import React, { useEffect, useContext, useState, useCallback } from "react";
 import { ChatContext } from "../../contexts/chatContext";
 import "./ChatArea.css";
-import axios from  'axios';
-
-// Define APIURL outside the component to ensure it's a constant
-const APIURL =
-  process.env.NODE_ENV === "production"
-    ? "https://jibber-backend.onrender.com"
-    : "http://localhost:5000";
+import axios from "../../utils/axiosConfig";
 
 const ChatArea = () => {
   const { selectedRoom, socket } = useContext(ChatContext);
@@ -20,11 +14,12 @@ const ChatArea = () => {
   ]);
   const [newMessage, setNewMessage] = useState("");
   const [error, setError] = useState("");
-
+  const [onlineUsers, setOnlineUsers] = useState(new Set());
+  
   // Fetch user data on component mount
   const fetchUserData = useCallback(async () => {
     try {
-      const response = await axios.get(`${APIURL}/api/users/profile`,{ withCredentials: true });
+      const response = await axios.get("/api/users/profile");
       if (response.status === 200) {
         setUser(response.data);
       }
@@ -38,11 +33,10 @@ const ChatArea = () => {
     fetchUserData();
   }, [fetchUserData]);
 
-  // Fetch messages for the selected room
   const fetchMessages = useCallback(async () => {
     if (!selectedRoom) return;
     try {
-      const response = await axios.get(`${APIURL}/api/chats/${selectedRoom._id}`,{ withCredentials: true });
+      const response = await axios.get(`/api/chats/${selectedRoom._id}`);
       const messagesData = response.data.map((message) => ({
         sender: message.user.username,
         text: message.message,
@@ -53,13 +47,25 @@ const ChatArea = () => {
       setError("Failed to fetch messages.");
     }
   }, [selectedRoom]);
-
   useEffect(() => {
     if (selectedRoom && socket) {
       fetchMessages();
       socket.emit("joinRoom", selectedRoom._id);
+   
+       socket.on("onlineUsers", (userIds)=>
+      {
+        const onlineSet= new Set(userIds); 
+        console.log(onlineSet);
+        setOnlineUsers(onlineSet);
+      });
+      return()=>{
+        socket.off("onlineUsers");
+      }
+      // return () => {
+      //   socket.off("onlineUsers", handleOnlineUsers);
+      // };
     }
-  }, [selectedRoom, socket, fetchMessages]);
+  }, [selectedRoom, socket, fetchMessages]); // Removed 'onlineUsers' from dependencies
 
   useEffect(() => {
     if (socket) {
@@ -69,7 +75,10 @@ const ChatArea = () => {
           { sender: message.sender, text: message.text },
         ]);
       };
+      
       socket.on("newMessage", handleNewMessage);
+
+      // Cleanup function to remove listener
       return () => {
         socket.off("newMessage", handleNewMessage);
       };
@@ -86,14 +95,30 @@ const ChatArea = () => {
     });
     setNewMessage("");
   };
+  const typing = (e) => {
+    e.preventDefault();
+    socket.emit("typing", {
+      sender: user._id,
+      roomId: selectedRoom._id,
+    }
+
+    )
+    setNewMessage(e.target.value);
+  }
 
   return (
     <div className="chat-container">
       {selectedRoom && (
         <div className="chat-area">
+          <div className="room-title">{selectedRoom.name}</div>
           <div className="messages">
             {messages.map((message, index) => (
-              <div key={index} className={`message ${message.sender === user.username ? "sent" : "received"}`}>
+              <div
+                key={index}
+                className={`message ${
+                  message.sender === user.username ? "sent" : "received"
+                }`}
+              >
                 <strong>{message.sender}</strong>: {message.text}
               </div>
             ))}
@@ -103,7 +128,7 @@ const ChatArea = () => {
               <input
                 type="text"
                 value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
+                onChange={typing}
                 placeholder="Type a message..."
                 required
               />
@@ -119,7 +144,12 @@ const ChatArea = () => {
           <h2>Members</h2>
           <ul>
             {selectedRoom.members.map((member) => (
-              <li key={member._id}>{member.username}</li>
+              <li key={member._id}>
+                <span>{member.username}</span>
+                {onlineUsers.has(member._id) && (
+                  <span className="online-status">🟢 Online</span>
+                )}
+              </li>
             ))}
           </ul>
         </div>
