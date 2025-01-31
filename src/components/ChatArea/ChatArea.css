@@ -5,9 +5,9 @@
 }
 
 .room-title {
-    position: fixed;
+    margin-right:10px;
+    position: absolute;
     top: 0;
-    left: 400px;
     font-size: 30px;
     font-weight: bold;
     color: #000000;
@@ -16,12 +16,13 @@
 
     border-radius: 10px;
     box-shadow: 0 15px 15px rgba(0, 0, 0, 0.2);
-    width: 850px;
+    width: 800px;
     margin-bottom: 2;
     height: 60px;
     display: flex;
     gap: 20px;
     background-color: #d0fffb;
+    margin-top:10px;
 
 }
 
@@ -208,10 +209,11 @@
 }
 
 .no-room {
-    margin: auto;
-    text-align: center;
-    margin-left: 400px;
-    font-weight: 900;
+    margin-left:400px;
+   margin-top:300px;
+   font-weight: bold    ;
+   font-size:xx-large;
+   
 
 }
 

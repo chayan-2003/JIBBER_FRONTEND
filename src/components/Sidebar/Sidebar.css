@@ -1,7 +1,6 @@
 .sidebar-container {
   background-color: #ccffff;
   width: 390px;
-  height: 100vh;
   overflow-y: auto;
 }
 
@@ -50,14 +49,14 @@
   margin: 10px;
   width: 50px;
   border-radius: 10px;
-  border:1px solid rgba(82, 7, 7, 0.1) ;
+  border: 1px solid rgba(82, 7, 7, 0.1);
   height: 10px;
   text-align: center;
   padding-bottom: 12px;
   background-color: #1561db;
   cursor: pointer;
   font-size: 15px;
-  color:white;
+  color: white;
   box-shadow: 0 100px 20px rgba(82, 7, 7, 0.1);
 }
 
@@ -67,24 +66,25 @@
 
 
 }
-.room-members
-{
-  display:flex;
-  flex-direction:row;
+
+.room-members {
+  display: flex;
+  flex-direction: row;
 }
+
 .room-leave {
   padding: 5px;
   margin: 10px;
   width: 60px;
   border-radius: 10px;
-  border:1px solid rgba(82, 7, 7, 0.1) ;
+  border: 1px solid rgba(82, 7, 7, 0.1);
   height: 30px;
   text-align: center;
   padding-bottom: 12px;
   background-color: #3d65e8;
   cursor: pointer;
   font-size: 15px;
-  color:white;
+  color: white;
   box-shadow: 0 100px 20px rgba(82, 7, 7, 0.1);
 
 }
@@ -106,13 +106,13 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  border: 2px solid #000000; 
-  width:300px;
+  border: 2px solid #000000;
+  width: 300px;
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color: #f9f9f9; 
+  background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-left:40px;
+  margin-left: 40px;
 }
 
 .create-room-toggle {
@@ -137,14 +137,14 @@
   margin: 10px;
   width: 60px;
   border-radius: 10px;
-  border:1px solid rgba(82, 7, 7, 0.1) ;
+  border: 1px solid rgba(82, 7, 7, 0.1);
   height: 30px;
   text-align: center;
   padding-bottom: 12px;
   background-color: #3d65e8;
   cursor: pointer;
   font-size: 15px;
-  color:white;
+  color: white;
   box-shadow: 0 100px 20px rgba(82, 7, 7, 0.1);
 
 }
@@ -160,7 +160,7 @@
 
 .room-name-input {
   width: 250px;
-  height:25px;
+  height: 25px;
   margin: auto
 }
 
@@ -168,29 +168,30 @@
   width: 80px;
   margin: auto;
   background-color: #3399FF;
-  margin-top:15px;
-  height:30px;
+  margin-top: 15px;
+  height: 30px;
   border-radius: 4px;
-  cursor:pointer;
+  cursor: pointer;
   font-weight: bold;
-  color:#ccffff;
+  color: #ccffff;
   font-size: 15px;
 }
+
 .create-room-button:hover {
   background-color: #423fff;
 }
-.logout-section
-{
-  position:fixed;
-  bottom:0;
-  margin-left:310px;
+
+.logout-section {
+  position: fixed;
+  bottom: 0;
+  margin-left: 310px;
 
 }
-.logout-button
-{
-  background-color: 	#ff8282;
-  font-weight:bold;
-  margin-left:30px;
+
+.logout-button {
+  background-color: #ff8282;
+  font-weight: bold;
+  margin-left: 30px;
   border-radius: 10px;
 }
 
@@ -261,7 +262,9 @@
   .sidebar-container {
     padding: 10px;
   }
-}/* filepath: /C:/Users/User/Desktop/chatApp_frontend/jibber_frontend/src/components/Sidebar/Sidebar.css */
+}
+
+/* filepath: /C:/Users/User/Desktop/chatApp_frontend/jibber_frontend/src/components/Sidebar/Sidebar.css */
 
 .hamburger {
   display: none;
