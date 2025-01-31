@@ -193,8 +193,8 @@ const ChatArea = () => {
           {error && <div className="error">{error}</div>}
         </div>
       )}
-      {!selectedRoom && <div className="no-room">JOIN AND OPEN A ROOM TO JIBBER</div> 
-
+      {!selectedRoom && <div className="no-room">JOIN AND OPEN A ROOM TO JIBBER</div>
+      
   }
       {selectedRoom && (
         <div className="member-list">

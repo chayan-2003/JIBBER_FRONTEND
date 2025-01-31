@@ -4,6 +4,7 @@ import axios from "../../utils/axiosConfig";
 import "./Sidebar.css";
 import { ChatContext } from '../../contexts/chatContext';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { FaBars, FaTimes } from 'react-icons/fa';
 const APIURL =
     process.env.NODE_ENV === "production"
         ? "https://jibber-backend.onrender.com"
@@ -19,6 +20,11 @@ const Sidebar = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleSidebar = () => {
+        setIsOpen(!isOpen);
+    };
 
     const { selectedRoom, setSelectedRoom } = useContext(ChatContext);
 
@@ -200,79 +206,84 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="sidebar-container">
-            <div className="sidebar-header">
-                <h2 className="chat-room-lekha">  Rooms</h2>
-                <i className="fa-solid fa-circle-plus fa-2x" style={{ color: '#1d5087', marginRight: 350, cursor: 'pointer' }} onClick={() => setIsCreating(!isCreating)} >
-                    {isCreating ? '' : ''}
-                </i>
+        <>
+            <div className="hamburger" onClick={toggleSidebar}>
+                {isOpen ? <FaTimes /> : <FaBars />}
             </div>
+            <div className={`sidebar-container ${isOpen ? 'active' : ''}`}>
+                <div className="sidebar-header">
+                    <h2 className="chat-room-lekha">  Rooms</h2>
+                    <i className="fa-solid fa-circle-plus fa-2x" style={{ color: '#1d5087', marginRight: 350, cursor: 'pointer' }} onClick={() => setIsCreating(!isCreating)} >
+                        {isCreating ? '' : ''}
+                    </i>
+                </div>
 
-            {error && <div className="error-message">{error}</div>}
+                {error && <div className="error-message">{error}</div>}
 
-            {isCreating && (
-                <form className="create-room-form" onSubmit={handleCreateRoom}>
-                    <input
-                        className="room-name-input"
-                        type="text"
-                        placeholder="Room Name"
-                        value={newRoom}
-                        onChange={(e) => setNewRoom(e.target.value)}
-                        required
-                    />
-                    <input
-                        className="room-name-input"
-                        type="text"
-                        placeholder="Description"
-                        value={newRoomDescription}
-                        onChange={(e) => setNewRoomDescription(e.target.value)}
-                    />
-                    <button type="submit" disabled={loading} className="create-room-button">
-                        {loading ? 'Creating...' : 'Create'}
-                    </button>
-                </form>
-            )}
+                {isCreating && (
+                    <form className="create-room-form" onSubmit={handleCreateRoom}>
+                        <input
+                            className="room-name-input"
+                            type="text"
+                            placeholder="Room Name"
+                            value={newRoom}
+                            onChange={(e) => setNewRoom(e.target.value)}
+                            required
+                        />
+                        <input
+                            className="room-name-input"
+                            type="text"
+                            placeholder="Description"
+                            value={newRoomDescription}
+                            onChange={(e) => setNewRoomDescription(e.target.value)}
+                        />
+                        <button type="submit" disabled={loading} className="create-room-button">
+                            {loading ? 'Creating...' : 'Create'}
+                        </button>
+                    </form>
+                )}
 
-            <ul className="rooms-list">
-                {loading && <li>Loading...</li>}
-                {!loading && rooms.length === 0 && <li>No rooms available.</li>}
-                {rooms.map((room) => (
-                    <li key={room._id} className={`room-item ${userRooms.includes(room._id) ? 'joined' : ''}`}>
-                        <div className="left-portion">
-                            <div className="room-info">
-                                <div className="room-name">{room.name}</div>
-                                <div className="room-description">{room.description}</div>
-                            </div>
-                            <div className="room-members">
-                                <div className="room-select" onClick={() => { if (userRooms.includes(room._id)) setSelectedRoom(room); }}>
-                                    Open
+                <ul className="rooms-list">
+                    {loading && <li>Loading...</li>}
+                    {!loading && rooms.length === 0 && <li>No rooms available.</li>}
+                    {rooms.map((room) => (
+                        <li key={room._id} className={`room-item ${userRooms.includes(room._id) ? 'joined' : ''}`}>
+                            <div className="left-portion">
+                                <div className="room-info">
+                                    <div className="room-name">{room.name}</div>
+                                    <div className="room-description">{room.description}</div>
                                 </div>
-                                {userRooms.includes(room._id) ? (
-                                    <button className="room-leave" onClick={() => handleLeaveRoom(room._id)} disabled={loading}>
-                                        Leave
-                                    </button>
-                                ) : (
-                                    <button className="room-join" onClick={() => handleJoinRoom(room._id)} disabled={loading}>
-                                        Join
-                                    </button>
-                                )}
+                                <div className="room-members">
+                                    <div className="room-select" onClick={() => { if (userRooms.includes(room._id)) setSelectedRoom(room); }}>
+                                        Open
+                                    </div>
+                                    {userRooms.includes(room._id) ? (
+                                        <button className="room-leave" onClick={() => handleLeaveRoom(room._id)} disabled={loading}>
+                                            Leave
+                                        </button>
+                                    ) : (
+                                        <button className="room-join" onClick={() => handleJoinRoom(room._id)} disabled={loading}>
+                                            Join
+                                        </button>
+                                    )}
+                                </div>
                             </div>
-                        </div>
 
-                    </li>
-                ))}
-            </ul>
+                        </li>
+                    ))}
+                </ul>
 
-            <div className="logout-section">
-                <button onClick={handleLogout} disabled={loading} className="logout-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
-                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-                    </svg>
-                    {loading ? 'Logging out...' : ''}
-                </button>
+                <div className="logout-section">
+                    <button onClick={handleLogout} disabled={loading} className="logout-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+                            <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                        </svg>
+                        {loading ? 'Logging out...' : ''}
+                    </button>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

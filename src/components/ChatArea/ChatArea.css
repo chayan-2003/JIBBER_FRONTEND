@@ -175,82 +175,72 @@
 }
 
 :root {
-    --color-1: #ffe4e1; /* Misty Rose */
-    --color-2: #e6e6fa; /* Lavender */
-    --color-3: #f0fff0; /* Honeydew */
-    --color-4: #fafad2; /* Light Goldenrod Yellow */
-    --color-5: #f5f5dc; /* Beige */
-  }
-  
-  .messages .message:nth-child(5n+1) .text {
+    --color-1: #ffe4e1;
+    /* Misty Rose */
+    --color-2: #e6e6fa;
+    /* Lavender */
+    --color-3: #f0fff0;
+    /* Honeydew */
+    --color-4: #fafad2;
+    /* Light Goldenrod Yellow */
+    --color-5: #f5f5dc;
+    /* Beige */
+}
+
+.messages .message:nth-child(5n+1) .text {
     background-color: var(--color-1);
-  }
-  
-  .messages .message:nth-child(5n+2) .text {
+}
+
+.messages .message:nth-child(5n+2) .text {
     background-color: var(--color-2);
-  }
-  
-  .messages .message:nth-child(5n+3) .text {
+}
+
+.messages .message:nth-child(5n+3) .text {
     background-color: var(--color-3);
-  }
-  
-  .messages .message:nth-child(5n+4) .text {
+}
+
+.messages .message:nth-child(5n+4) .text {
     background-color: var(--color-4);
-  }
-  
-  .messages .message:nth-child(5n+5) .text {
+}
+
+.messages .message:nth-child(5n+5) .text {
     background-color: var(--color-5);
-  }
-  .no-room
-  {
-    margin:auto;
+}
+
+.no-room {
+    margin: auto;
     text-align: center;
-    margin-left:300px;
-    font-weight:900;
-    font-size:xx-large;
-  }
-  @media (max-width: 768px) {
-    .chat-container {
-      flex-direction: column;
-      width: 100%;
-    }
-  
+    margin-left: 400px;
+    font-weight: 900;
+
+}
+
+@media (max-width: 768px) {
     .sidebar-container {
-      width: 100%;
-      height: auto;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 250px;
+        height: 100%;
+        background-color: #ccffff;
+        transition: left 0.3s ease;
+        z-index: 1000;
     }
-  
-    .chat-area {
-      width: 100%;
-      height: 400px; /* Adjust as needed */
+
+    .member-list {
+        display: none;
     }
-  
+
     .room-title {
-      left: 0;
-      width: 100%;
-      text-align: center;
+        display: none;
     }
-  
+
     .message-input-field {
-      width: 100%;
+        width: 100px;
+        padding: 10px;
+
+        font-size: 20px;
+        font-weight: 100;
+        font-family: Garamond, serif;
     }
-  }
-  
-  /* Further adjustments for very small screens */
-  @media (max-width: 480px) {
-    .room-title {
-      font-size: 24px;
-    }
-  
-    .member-username {
-      font-size: 16px;
-    }
-  
-    .message-input-field {
-      padding: 8px;
-    }
-  
-    .send-button {
-      padding: 8px;
-    }
-  }
+}

@@ -261,4 +261,44 @@
   .sidebar-container {
     padding: 10px;
   }
+}/* filepath: /C:/Users/User/Desktop/chatApp_frontend/jibber_frontend/src/components/Sidebar/Sidebar.css */
+
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1001;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar-container {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 250px;
+    height: 100%;
+    background-color: #ccffff;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar-container.active {
+    left: 0;
+  }
+
+  .logout-section {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    margin-left: 0;
+  }
 }
