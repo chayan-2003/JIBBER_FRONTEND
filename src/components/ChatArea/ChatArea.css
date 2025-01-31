@@ -5,9 +5,9 @@
 }
 
 .room-title {
-    margin-right:10px;
     position: absolute;
     top: 0;
+    left: 400px;
     font-size: 30px;
     font-weight: bold;
     color: #000000;
@@ -16,7 +16,7 @@
 
     border-radius: 10px;
     box-shadow: 0 15px 15px rgba(0, 0, 0, 0.2);
-    width: 800px;
+    width: 850px;
     margin-bottom: 2;
     height: 60px;
     display: flex;
@@ -31,7 +31,6 @@
     height: 600px;
     padding: 20px;
     border-radius: 8px;
-    
     box-sizing: border-box;
 }
 
@@ -74,7 +73,7 @@
 
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-   
+    position: fixed;
     bottom: 0;
     border: 1px solid;
 
@@ -208,11 +207,10 @@
 }
 
 .no-room {
-    margin-left:400px;
-   margin-top:300px;
-   font-weight: bold    ;
-   font-size:xx-large;
-   
+    margin: auto;
+    text-align: center;
+    margin-left: 400px;
+    font-weight: 900;
 
 }
 
