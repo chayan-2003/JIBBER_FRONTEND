@@ -196,7 +196,7 @@ const Sidebar = () => {
                 withCredentials: true
             });
             localStorage.removeItem('userInfo');
-            navigate('/login');
+            navigate('/');
         } catch (error) {
             console.error('Error logging out:', error);
             setError('Failed to logout. Please try again.');
