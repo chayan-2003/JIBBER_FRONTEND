@@ -11,6 +11,7 @@ const ChatArea = () => {
     {
       sender: "Chayan",
       text: "Welcome to the chat!",
+      timestamp: new Date(),
     },
   ]);
   const [newMessage, setNewMessage] = useState("");
@@ -44,6 +45,7 @@ const ChatArea = () => {
       const messagesData = response.data.map((message) => ({
         sender: message.user.username,
         text: message.message,
+        timestamp: message.createdAt,
       }));
       setMessages(messagesData);
     } catch (error) {
@@ -68,14 +70,14 @@ const ChatArea = () => {
       //   socket.off("onlineUsers", handleOnlineUsers);
       // };
     }
-  }, [selectedRoom, socket, fetchMessages]); 
+  }, [selectedRoom, socket, fetchMessages]);
 
   useEffect(() => {
     if (socket) {
       const handleNewMessage = (message) => {
         setMessages((prevMessages) => [
           ...prevMessages,
-          { sender: message.sender, text: message.text },
+          { sender: message.sender, text: message.text, timestamp: new Date() },
         ]);
       };
 
@@ -100,7 +102,7 @@ const ChatArea = () => {
         socket.off("userStopTyping");
 
       };
-      
+
     }
   }, [socket, selectedRoom, usersTyping]);
 
@@ -130,7 +132,7 @@ const ChatArea = () => {
 
     emitTyping();
 
-   
+
     typingTimeoutRef.current = setTimeout(() => {
       if (socket && user && selectedRoom) {
         socket.emit("stopTyping", { sender: user._id, roomId: selectedRoom._id });
@@ -143,7 +145,16 @@ const ChatArea = () => {
     <div className="chat-container">
       {selectedRoom && (
         <div className="chat-area">
-          <div className="room-title">{selectedRoom.name}</div>
+
+          <div className="room-title">
+            <div className="room-name-icon">
+              <i class="fa-regular fa-comment"></i>
+            </div>
+            <div className="room-desc-components">
+              <div className="selected-room-name" >{selectedRoom.name}</div>
+              <div className="selected-room-description" >{selectedRoom.description}</div>
+            </div>
+          </div>
           <div className="messages">
             {messages.map((message, index) => (
               <div
@@ -151,7 +162,16 @@ const ChatArea = () => {
                 className={`message ${message.sender === user.username ? "sent" : "received"
                   }`}
               >
-                <strong>{message.sender}</strong>: {message.text}
+                {/* <span className="sender">{message.sender}</span> */}
+                <div className="whatsapp" >
+                  <div className="message-info">
+                    <span className="sender">{message.sender}</span>
+                    <span className="dot">•</span>
+                    <span className="timestamp">{new Date(message.timestamp).toLocaleTimeString()}</span>
+                  </div>
+                  <span className="text">{message.text}</span>
+
+                </div>
               </div>
             ))}
           </div>
@@ -163,29 +183,48 @@ const ChatArea = () => {
                 onChange={typing}
                 placeholder="Type a message..."
                 required
+                className="message-input-field"
               />
-              <button type="submit">Send</button>
+              <button type="submit" className="send-button">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+              </button>
             </form>
           </div>
           {error && <div className="error">{error}</div>}
         </div>
       )}
-      {!selectedRoom && <div className="no-room">Select a room to start chatting</div>}
+      {!selectedRoom && <div className="no-room">JOIN AND OPEN A ROOM TO JIBBER</div> 
+
+  }
       {selectedRoom && (
         <div className="member-list">
-          <h2>Members</h2>
+          <div className="member-list-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+              <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
+            </svg>
+            <span className="member-list-title">
+              Members
+            </span>
+          </div>
           <ul>
-            {selectedRoom.members.map((member) => (
-              <li key={member._id}>
-                <span>{member.username}</span>
-                {onlineUsers.has(member._id) && (
-                  <span className="online-status">🟢 Online</span>
-                )}
-                {usersTyping.has(member._id) && (
-                  <div className="typing-status">Typing...</div>)
-                }
-              </li>
-            ))}
+            {selectedRoom.members.map((member) => {
+              const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+              return (
+                <ul key={member._id} className="member">
+                  <div>
+                    <span className="member-username" style={{ color: randomColor }}>
+                      {member.username}
+                    </span>
+                    {onlineUsers.has(member._id) && (
+                      <span className="online-status">🟢</span>
+                    )}
+                  </div>
+                  {usersTyping.has(member._id) && (
+                    <div className="typing-status">Typing...</div>
+                  )}
+                </ul>
+              );
+            })}
           </ul>
         </div>
       )}
